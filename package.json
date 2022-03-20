@@ -1,0 +1,36 @@
+{
+  "name": "project1",
+  "version": "1.0.0",
+  "description": "E-Shop",
+  "main": "server",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "client": "npm start --prefix frontend",
+    "start": "node backend/server",
+    "server": "nodemon backend/server",
+    "dev": "concurrently -k \"npm run server\" \"npm run client\"",
+    "data:import": "node backend/seeder",
+    "data:destroy": "node backend/seeder -d"
+  },
+  "keywords": [
+    "node"
+  ],
+  "author": "amosmoyo",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.24.0",
+    "bcryptjs": "^2.4.3",
+    "cloudinary": "^1.28.1",
+    "colors": "^1.4.0",
+    "concurrently": "^6.4.0",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-async-handler": "^1.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.1.1",
+    "multer": "^1.4.4",
+    "multer-storage-cloudinary": "^4.0.0",
+    "nodemon": "^2.0.15"
+  }
+}
