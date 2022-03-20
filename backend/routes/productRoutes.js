@@ -1,11 +1,19 @@
 const express = require("express");
-const asyncHandler = require('express-async-handler')
+const asyncHandler = require("express-async-handler");
 
 const Products = require("../model/productsModel");
 
-const {getProducts, getProduct, deleteProduct, createProduct, updateProduct, createProductReview, getTopRatedProducts} = require('../controller/productController');
+const {
+  getProducts,
+  getProduct,
+  deleteProduct,
+  createProduct,
+  updateProduct,
+  createProductReview,
+  getTopRatedProducts,
+} = require("../controller/productController");
 
-const {protect, adminPrivilages} = require('../middleware/auth')
+const { protect, adminPrivilages } = require("../middleware/auth");
 
 const router = express.Router();
 
@@ -21,16 +29,16 @@ const router = express.Router();
 //     });
 // }));
 
-router.route('/').get(getProducts);
+router.route("/").get(getProducts);
 
-router.route('/top').get(getTopRatedProducts)
+router.route("/top").get(getTopRatedProducts);
 
 // @desc Get all products
 // @Routes /api/v1/products/:id
 // access Public
 // router.get("/details/:id", asyncHandler(async (req, res) => {
 //     const product = await Products.findById(req.params.id);
-    
+
 //     if(!product) {
 //         res.status(404);
 //         throw new Error('Product not found')
@@ -39,17 +47,17 @@ router.route('/top').get(getTopRatedProducts)
 //       status: "success",
 //       product,
 //     });
-  
+
 // }));
 
-router.route('/details/:id').get(getProduct);
+router.route("/details/:id").get(getProduct);
 
-router.route('/delete/:id').delete(protect, adminPrivilages, deleteProduct);
+router.route("/delete/:id").delete(protect, adminPrivilages, deleteProduct);
 
-router.route('/create').post(protect, adminPrivilages, createProduct )
+router.route("/create").post(protect, adminPrivilages, createProduct);
 
-router.route('/update/:id').put(protect, adminPrivilages, updateProduct);
+router.route("/update/:id").put(protect, adminPrivilages, updateProduct);
 
-router.route('/create/:id/reviews').post(protect, createProductReview)
+router.route("/create/:id/reviews").post(protect, createProductReview);
 
 module.exports = router;
