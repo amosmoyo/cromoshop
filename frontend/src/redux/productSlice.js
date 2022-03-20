@@ -21,8 +21,8 @@ export const getProducts = createAsyncThunk(
   async ({ keyword, pageNumber }, thunkAPI) => {
     try {
       const res = await axios.get(
-        `${url}api/v1/products?keyword=${keyword ? keyword : ""}&pageNumber=${
-          pageNumber ? pageNumber : pageNumber
+        `${url}api/v1/products?keyword=${keyword ? keyword : " "}&pageNumber=${
+          pageNumber ? pageNumber : " "
         }`
       );
       let data;
