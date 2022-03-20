@@ -17,7 +17,7 @@ const initialProductState = {
     topRatedProducts:[]
 }
 export const getProducts = createAsyncThunk(
-    "api/v1/products", async ({keyword = '', pageNumber=''}, thunkAPI) => {
+    "api/v1/products", async ({keyword = null, pageNumber = null}, thunkAPI) => {
       try {
         const res = await axios.get(`${url}api/v1/products?keyword=${keyword}&pageNumber=${pageNumber}`);
         let data;
