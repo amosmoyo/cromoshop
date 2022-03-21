@@ -4,7 +4,8 @@ import thunk from "redux-thunk";
 import {orderAction} from './orderSlice'
 import {adminActions} from './adminSlice'
 
-const url = "http://127.0.0.1:5000/";
+// const url = "http://127.0.0.1:5000/";
+const url = '/'
 
 // initialize state
 const authInitialState = { loading: false, error: "", userData: {}, user: {} };

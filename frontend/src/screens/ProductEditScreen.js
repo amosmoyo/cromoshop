@@ -109,7 +109,7 @@ const ProductEditScreen = () => {
       let data;
 
       const res = await axios.post(
-        "http://localhost:5000/api/v1/upload",
+        "/api/v1/upload",
         formData,
         config
       );

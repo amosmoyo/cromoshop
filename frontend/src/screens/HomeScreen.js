@@ -37,7 +37,6 @@ const HomeScreen = () => {
   }, [dispatch, keyword, pageNumber]);
 
   const productsData = products ? products : [];
-  console.log(topRatedProducts);
 
   return (
     <>

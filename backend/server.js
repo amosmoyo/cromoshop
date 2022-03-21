@@ -62,7 +62,7 @@ app.use('/uploads', express.static(path.join(__dirname, '/uploads')) )
 // paypal config route
 app.get('/api/v1/config', (req, res) => res.send(process.env.PAYPAL_CLIENT_ID))
 
-if(process.env.ENVIRONMENT === "production") {
+if(process.env.NODE_ENV === "production") {
     app.use(express.static(path.join(__dirname + './../frontend/build')));
 
     app.get('/*', (req, res) => res.sendFile(path.resolve(__dirname + './../frontend/buildindex.html')))

@@ -20,7 +20,7 @@ export const getProducts = createAsyncThunk(
   async ({ keyword, pageNumber }, thunkAPI) => {
     try {
       const res = await axios.get(
-        `${url}api/v1/products?keyword=${keyword ? keyword : " "}&pageNumber=${
+        `/api/v1/products?keyword=${keyword ? keyword : " "}&pageNumber=${
           pageNumber ? pageNumber : " "
         }`
       );
@@ -44,7 +44,7 @@ export const getProducts = createAsyncThunk(
 export const getProductDetails = createAsyncThunk(
   "api/v1/getProductDetails",
   async (id) => {
-    const { data } = await axios.get(url + "api/v1/products/details/" + id);
+    const { data } = await axios.get("/api/v1/products/details/" + id);
     return { ...data };
   }
 );
@@ -69,7 +69,7 @@ export const createProductReview = createAsyncThunk(
       };
 
       const res = await axios.post(
-        `${url}api/v1/products/create/${id}/reviews`,
+        `/api/v1/products/create/${id}/reviews`,
         review,
         config
       );
@@ -97,7 +97,7 @@ export const getTopRatedProducts = createAsyncThunk(
   "api/v1/products/top",
   async (_, thunkAPI) => {
     try {
-      const res = await axios.get(`${url}api/v1/products/top`);
+      const res = await axios.get(`/api/v1/products/top`);
       let data;
 
       if (res.status === 200) {

@@ -20,6 +20,7 @@ import AllOrdersScreen from './screens/AllOrdersScreen';
 import ProductScreen from "./screens/ProductScreen";
 import Cart from "./screens/Cart";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import axios from 'axios'
 
 function App() {
   // const [color, setColor] = useState("red");
@@ -30,6 +31,8 @@ function App() {
   //     setCount((count) => count + 1);
   //   }, 1000);
   // });
+
+  axios.defaults.baseURL = 'http://127.0.0.1:5000';
 
   return (
     <Router>
