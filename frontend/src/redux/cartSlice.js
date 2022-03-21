@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 // const url = "http://127.0.0.1:5000/";
-const url = '/'
+// const url = '/'
 
 const initalCartState = {
   loading: false,
@@ -29,7 +29,7 @@ export const addItemsToCart = createAsyncThunk(
           );
         }
       } else {
-        let response = await axios.get(url + "api/v1/products/details/" + id);
+        let response = await axios.get("/api/v1/products/details/" + id);
 
         data = response.data;
       }

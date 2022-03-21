@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const url = "/";
+// const url = "/";
 
 const initialState = {
   loading: false,
@@ -30,7 +30,7 @@ export const createOrder = createAsyncThunk(
       };
 
       const response = await axios.post(
-        `${url}api/v1/order/add`,
+        `/api/v1/order/add`,
         myOrder,
         config
       );
@@ -69,7 +69,7 @@ export const getOrderDetails = createAsyncThunk(
       };
 
       const response = await axios.get(
-        `${url}api/v1/order/getorder/${id}`,
+        `/api/v1/order/getorder/${id}`,
         config
       );
 
@@ -105,7 +105,7 @@ export const updatePaidOrder = createAsyncThunk(
       };
 
       const response = await axios.put(
-        `${url}api/v1/order/update/${id}/pay`,
+        `/api/v1/order/update/${id}/pay`,
         paymentResult,
         config
       );
@@ -142,7 +142,7 @@ export const getMyOrderList = createAsyncThunk(
       };
 
       const response = await axios.get(
-        `${url}api/v1/order/myorders`,
+        `/api/v1/order/myorders`,
         config
       );
 

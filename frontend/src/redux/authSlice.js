@@ -1,11 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import thunk from "redux-thunk";
 import {orderAction} from './orderSlice'
 import {adminActions} from './adminSlice'
 
 // const url = "http://127.0.0.1:5000/";
-const url = '/'
+// const url = '/'
 
 // initialize state
 const authInitialState = { loading: false, error: "", userData: {}, user: {} };
@@ -22,7 +21,7 @@ export const profile = createAsyncThunk(
         },
       };
 
-      const response = await axios.get(`${url}api/v1/auth/profile`, config);
+      const response = await axios.get(`/api/v1/auth/profile`, config);
 
       let data = response.data;
 
@@ -56,7 +55,7 @@ export const updateProfile = createAsyncThunk(
         },
       };
 
-      const response = await axios.put(`${url}api/v1/auth/profile`, updateData, config);
+      const response = await axios.put(`/api/v1/auth/profile`, updateData, config);
 
       let data = response.data;
 
@@ -87,7 +86,7 @@ export const register = createAsyncThunk(
       };
 
       const response = await axios.post(
-        `${url}api/v1/auth/register`,
+        `/api/v1/auth/register`,
         registerData,
         config
       );
@@ -124,7 +123,7 @@ export const login = createAsyncThunk(
       };
 
       const response = await axios.post(
-        `${url}api/v1/auth/login`,
+        `/api/v1/auth/login`,
         loginData,
         config
       );

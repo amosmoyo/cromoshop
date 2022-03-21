@@ -95,7 +95,6 @@ const CreateProductScreen = () => {
       if (res.status === 200 || res.status === 201) {
         setUploading(false);
         data = res.data;
-        console.log(data.result[0].url);
         setImage(data.result[0].url)
       }
     } catch (error) {

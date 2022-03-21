@@ -4,8 +4,6 @@ import axios from "axios";
 import {getProductDetails} from './productSlice'
 
 // const url = "http://127.0.0.1:5000/";
-const url = '/'
-
 const initialState = {
   loading: false,
   error: "",
@@ -36,7 +34,7 @@ export const getallUsers = createAsyncThunk(
         },
       };
 
-      const res = await axios.get(`${url}api/v1/auth/users`, config);
+      const res = await axios.get(`/api/v1/auth/users`, config);
 
       let data;
 
@@ -71,7 +69,7 @@ export const deleteUser = createAsyncThunk(
       };
 
       const res = await axios.delete(
-        `${url}api/v1/auth/users/delete/${id}`,
+        `/api/v1/auth/users/delete/${id}`,
         config
       );
 
@@ -107,7 +105,7 @@ export const getUsersById = createAsyncThunk(
         },
       };
 
-      const res = await axios.get(`${url}api/v1/auth/users/${id}`, config);
+      const res = await axios.get(`/api/v1/auth/users/${id}`, config);
 
       let data;
 
@@ -148,7 +146,7 @@ export const updateUsersById = createAsyncThunk(
       };
 
       const res = await axios.put(
-        `${url}api/v1/auth/users/${id}`,
+        `/api/v1/auth/users/${id}`,
         updateData,
         config
       );
@@ -185,7 +183,7 @@ export const deleteProduct = createAsyncThunk(
       };
 
       const res = await axios.delete(
-        `${url}api/v1/products/delete/${id}`,
+        `/api/v1/products/delete/${id}`,
         config
       );
 
@@ -221,7 +219,7 @@ export const createProduct = createAsyncThunk(
       };
 
       const res = await axios.post(
-        `${url}api/v1/products/create`,
+        `/api/v1/products/create`,
         product,
         config
       );
@@ -260,7 +258,7 @@ export const updateProductById = createAsyncThunk(
 
 
       const res = await axios.put(
-        `${url}api/v1/products/update/${id}`,
+        `/api/v1/products/update/${id}`,
         dataProduct,
         config
       );
@@ -299,7 +297,7 @@ export const getallOrders = createAsyncThunk(
         },
       };
 
-      const res = await axios.get(`${url}api/v1/order/allorders`, config);
+      const res = await axios.get(`/api/v1/order/allorders`, config);
 
       let data;
 
@@ -333,7 +331,7 @@ export const updateDeliveredOrder = createAsyncThunk(
       };
 
       const response = await axios.put(
-        `${url}api/v1/order/update/${id}/delivered`,
+        `/api/v1/order/update/${id}/delivered`,
         {},
         config
       );
