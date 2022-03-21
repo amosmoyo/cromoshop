@@ -18,7 +18,6 @@ import {
 
 import Message from "../components/Message";
 import Loader from "../components/Loading";
-import { cartSliceActions } from "../redux/cartSlice";
 
 const Cart = (props) => {
   const dispatch = useDispatch();
@@ -35,9 +34,14 @@ const Cart = (props) => {
     (state) => state.cartReducers
   );
 
+  const {userData} = useSelector((state) => state.authReducers)
+
   useEffect(() => {
+    if(!userData?.userInfo) {
+      navigate('/login')
+    }
     dispatch(addItemsToCart({ id, qty }));
-  }, [dispatch, id, qty]);
+  }, [dispatch, id, qty, userData, navigate]);
 
   const handleAddToCart = (id, qty) => {
     dispatch(addItemsToCart({ id, qty }));
