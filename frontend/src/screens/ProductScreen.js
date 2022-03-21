@@ -53,6 +53,14 @@ const ProductScreen = () => {
 
     let id = params.id;
 
+    if (message === "You have added a product review") {
+      dispatch(productAction.resetCreateProductReview());
+      toast.success(message, {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 10000,
+      });
+    }
+
     const fetchProduct = async () => {
       await dispatch(getProductDetails(id));
     };
@@ -60,13 +68,7 @@ const ProductScreen = () => {
     fetchProduct();
   }, [dispatch, params, userData, message]);
 
-  if (message === "You have added a product review") {
-    dispatch(productAction.resetCreateProductReview());
-    toast.success(message, {
-      position: toast.POSITION.TOP_CENTER,
-      autoClose: 10000,
-    });
-  }
+
 
   const handleMoveToCart = (id) => {
     navigate(`/cart/${id}?qty=${qty}`);
@@ -85,7 +87,6 @@ const ProductScreen = () => {
 
   return (
     <>
-      
       {authLoading && <Loading />}
       {authError && <Message variant="danger">{authError}</Message>}
       <Link className="btn btn-danger mb-1" to="/">
@@ -97,7 +98,7 @@ const ProductScreen = () => {
         <Message variant="danger">{error}</Message>
       ) : (
         <>
-        <Meta title={product?.name} />
+          <Meta title={product?.name} />
           <Row>
             <Col md={6}>
               <Image src={product.image} alt={product.name} fluid />
@@ -183,72 +184,68 @@ const ProductScreen = () => {
           <Row>
             <Col md={6}>
               <h3>Reviews</h3>
-              {product.reviews.length === 0 ? (
-                <p>No reviews</p>
-              ) : (
-                <ListGroup>
-                  {product.reviews.map((review) => (
-                    <ListGroup.Item>
-                      <strong>{review.name}</strong>
-                      <Rating value={review.rating}></Rating>
-                      <p>{review.comment}</p>
-                      <p>{review.createdAt.substring(0, 10)}</p>
-                    </ListGroup.Item>
-                  ))}
+              {product.reviews.length === 0 && <p>No reviews</p>}
+              <ListGroup>
+                {product.reviews.map((review) => (
                   <ListGroup.Item>
-                    <p style={{ fontWeight: "bold" }}>
-                      <strong>Add a review</strong>
-                    </p>
-                    {reviewLoading && <Spinner animation="grow"></Spinner>}
-                    {reviewError && (
-                      <Message variant="danger">{reviewError}</Message>
-                    )}
-                    {userData?.userInfo ? (
-                      <>
-                        <Form onSubmit={handleAddReview}>
-                          <Form.Group className="mb-3" controlId="rating">
-                            <Form.Label>Rating</Form.Label>
-
-                            <Form.Control
-                              as="select"
-                              value={rating}
-                              onChange={(e) => setRating(e.target.value)}
-                            >
-                              <option value="">Select..</option>
-                              <option value="1">1-- very poor</option>
-                              <option value="2">2-- poor</option>
-                              <option value="3">3-- average</option>
-                              <option value="4">4-- good</option>
-                              <option value="5">5-- excellent</option>
-                            </Form.Control>
-                          </Form.Group>
-
-                          <Form.Group className="mb-3" controlId="comment">
-                            <Form.Label>Comment</Form.Label>
-                            <Form.Control
-                              as="textarea"
-                              row="3"
-                              placeholder="Enter commenht"
-                              value={comment}
-                              onChange={(e) => setComment(e.target.value)}
-                            />
-                          </Form.Group>
-
-                          <Button variant="dark" type="submit">
-                            Submit
-                          </Button>
-                        </Form>
-                      </>
-                    ) : (
-                      <p>
-                        {" "}
-                        Please <Link to="/login">sign in </Link> to add a
-                        comment
-                      </p>
-                    )}
+                    <strong>{review.name}</strong>
+                    <Rating value={review.rating}></Rating>
+                    <p>{review.comment}</p>
+                    <p>{review.createdAt.substring(0, 10)}</p>
                   </ListGroup.Item>
-                </ListGroup>
-              )}
+                ))}
+                <ListGroup.Item>
+                  <p style={{ fontWeight: "bold" }}>
+                    <strong>Add a review</strong>
+                  </p>
+                  {reviewLoading && <Spinner animation="grow"></Spinner>}
+                  {reviewError && (
+                    <Message variant="danger">{reviewError}</Message>
+                  )}
+                  {userData?.userInfo ? (
+                    <>
+                      <Form onSubmit={handleAddReview}>
+                        <Form.Group className="mb-3" controlId="rating">
+                          <Form.Label>Rating</Form.Label>
+
+                          <Form.Control
+                            as="select"
+                            value={rating}
+                            onChange={(e) => setRating(e.target.value)}
+                          >
+                            <option value="">Select..</option>
+                            <option value="1">1-- very poor</option>
+                            <option value="2">2-- poor</option>
+                            <option value="3">3-- average</option>
+                            <option value="4">4-- good</option>
+                            <option value="5">5-- excellent</option>
+                          </Form.Control>
+                        </Form.Group>
+
+                        <Form.Group className="mb-3" controlId="comment">
+                          <Form.Label>Comment</Form.Label>
+                          <Form.Control
+                            as="textarea"
+                            row="3"
+                            placeholder="Enter commenht"
+                            value={comment}
+                            onChange={(e) => setComment(e.target.value)}
+                          />
+                        </Form.Group>
+
+                        <Button variant="dark" type="submit">
+                          Submit
+                        </Button>
+                      </Form>
+                    </>
+                  ) : (
+                    <p>
+                      {" "}
+                      Please <Link to="/login">sign in </Link> to add a comment
+                    </p>
+                  )}
+                </ListGroup.Item>
+              </ListGroup>
             </Col>
           </Row>
         </>

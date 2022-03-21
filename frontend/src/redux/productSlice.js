@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-import req from "express/lib/request";
+import axios from "axios"
 
 const url = "http://127.0.0.1:5000/";
 
@@ -29,8 +28,6 @@ export const getProducts = createAsyncThunk(
 
       if (res.status === 200 || res.status === 201) {
         data = res.data;
-
-        console.log(data, "data");
 
         return data;
       }
@@ -76,8 +73,6 @@ export const createProductReview = createAsyncThunk(
         review,
         config
       );
-
-      console.log(res, 111);
 
       let data;
 
@@ -126,8 +121,7 @@ const initialProductSlice = createSlice({
     resetCreateProductReview(state, action) {
       state.message = "";
       state.reviewError = "";
-      state.reviewLoading = "";
-      state.message = "";
+      state.reviewLoading = false;
     },
   },
   extraReducers: {
