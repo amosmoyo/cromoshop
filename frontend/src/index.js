@@ -7,9 +7,11 @@ import reportWebVitals from './reportWebVitals';
 import {Provider} from 'react-redux';
 // import store from './store';
 import amos from './redux/store'
+import axios from 'axios';
 
 // import 'bootstrap/dist/css/bootstrap.min.css';
 // import 'bootstrap/dist/js/bootstrap.bundle.min';
+// axios.defaults.baseURL = 'http://127.0.0.1:5000';
 
 ReactDOM.render(
   <Provider store={amos}>

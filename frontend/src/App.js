@@ -16,11 +16,15 @@ import ProductListScreen from "./screens/ProductListScreen";
 import ProductEditScreen from "./screens/ProductEditScreen";
 import CreateProductScreen from './screens/CreateProductScreen';
 import AllOrdersScreen from './screens/AllOrdersScreen';
+import ActivationScreen from './screens/ActivationScreen';
+import ForgetPassword from './screens/Auth/ForgetPassword'
+import ResetPassword from './screens/Auth/ResetPassword'
 // import { BrowserRouter as Router, Route} from 'react-router-dom';
 import ProductScreen from "./screens/ProductScreen";
 import Cart from "./screens/Cart";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import axios from 'axios'
+
+import { AccountActivation } from './screens/Auth/AccountActivation'
 
 function App() {
   // const [color, setColor] = useState("red");
@@ -32,7 +36,7 @@ function App() {
   //   }, 1000);
   // });
 
-  axios.defaults.baseURL = 'http://127.0.0.1:5000';
+ 
 
   return (
     <Router>
@@ -51,7 +55,15 @@ function App() {
               <Route path="/order" element={<PlaceorderScreen />} />
               <Route path="/orderlist/:id" element={<OrderScreen />} />
               <Route path="/login" element={<LoginScreen />} />
-              <Route path="/register" element={<RegisterScreen />} />
+
+              <Route path="/forgetpassword" element={<ForgetPassword />} />
+
+              <Route path="/user/reset/:access_token" element={<ResetPassword />} />
+
+              <Route path="/register" element={<RegisterScreen />} exact />
+              {/* <Route path="/user/auth/activation/:id" element={<AccountActivation />} exact /> */}
+
+              <Route path="/user/auth/activation/:activation_token" element={<ActivationScreen />} />
               <Route path="/profile" element={<ProfileScreen />} />
               <Route path="/product/:id" element={<ProductScreen />} />
               <Route path="/cart/:id" element={<Cart />} />
