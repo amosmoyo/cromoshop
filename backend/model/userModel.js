@@ -28,21 +28,25 @@ const userSchema = new mongoose.Schema({
         required: [true, 'name is required'],
         type: Boolean,
         default: false
+    },
+    avatar: {
+        type: String,
+        default: "https://res.cloudinary.com/amosmoyo/image/upload/v1642018657/cld-sample.jpg"
     }
 }, 
 {
     timestamps: true
 });
 
-userSchema.pre('save', async function(next){
-    if(!this.isModified('password')) {
-     next()
-    }
+// userSchema.pre('save', async function(next){
+//     if(!this.isModified('password')) {
+//      next()
+//     }
 
-    const salt = await bcrypt.genSalt(10);
+//     const salt = await bcrypt.genSalt(10);
 
-    this.password = await bcrypt.hash(this.password, salt);
-})
+//     this.password = await bcrypt.hash(this.password, salt);
+// })
 
 userSchema.methods.getJWT = function() {
     return jwt.sign({id:this._id}, process.env.JWT_SECRETE, {expiresIn: process.env.JWT_EXPIRE})
