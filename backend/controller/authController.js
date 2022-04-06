@@ -163,10 +163,7 @@ exports.login = asyncHandler(async (req, res, next) => {
 });
 
 exports.getAccessToken = asyncHandler(async (req, res, next) => {
-  console.log(req.cookies);
   const rf_token = req.cookies.refreshtoken;
-
-  console.log(rf_token);
 
   if (!rf_token) {
     return res.status(400).json({
