@@ -139,15 +139,6 @@ exports.login = asyncHandler(async (req, res, next) => {
 
   const refresh_token = createRefreshToken({ id: checkUser._id });
 
-  // res.status(200).json(
-  //     {
-  //         success: true,
-  //         user
-  //     }
-  // )
-
-  // sendTokens(user, 200, res)
-
   res.status(200).cookie("refreshtoken", refresh_token, {
     httpOnly: true,
     path: "/api/v1/auth/refresh_token",
@@ -155,42 +146,44 @@ exports.login = asyncHandler(async (req, res, next) => {
     secure: false,
   });
 
-  console.log(req.cookies, 12);
-
   res.json({
     message: "Login success",
   });
 });
 
-exports.getAccessToken = asyncHandler(async (req, res, next) => {
-  const rf_token = req.cookies.refreshtoken;
+exports.getAccessToken = async (req, res, next) => {
+  try {
+    const rf_token = req.cookies.refreshtoken;
 
-  if (!rf_token) {
-    return res.status(400).json({
-      message: "Login now!",
-    });
-  }
-
-  let token = "";
-  let userId = "";
-
-  jwt.verify(rf_token, process.env.REFRESH_TOKEN_SECRETE, (err, user) => {
-    if (err) {
+    if (!rf_token) {
       return res.status(400).json({
         message: "Login now!",
       });
     }
-
-    const access_token = createAccessToken({ id: user.id });
-
-    token = access_token;
-    userId = user.id;
-  });
-
-  const userData = await User.findOne({ _id: userId });
-
-  sendTokens(token, userData, 200, res);
-});
+  
+    let token = "";
+    let userId = "";
+  
+    jwt.verify(rf_token, process.env.REFRESH_TOKEN_SECRETE, (err, user) => {
+      if (err) {
+        return res.status(400).json({
+          message: "Login now!",
+        });
+      }
+  
+      const access_token = createAccessToken({ id: user.id });
+  
+      token = access_token;
+      userId = user.id;
+    });
+  
+    const userData = await User.findOne({ _id: userId });
+  
+    sendTokens(token, userData, 200, res)
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
 
 // @desc POST login user
 // @routes /api/v1/auth/forgetpassword
@@ -397,18 +390,15 @@ exports.facebookLogin = async (req, res, next) => {
 // @Routes /api/v1/auth/profile
 // access Private
 exports.getProfile = asyncHandler(async (req, res, next) => {
+  console.log(req.cookies.refreshtoken)
   const user = await User.findById(req.user._id);
 
   if (!user) {
-    return next(new ErrorResponse("Invalid credentials", 401));
+    // return next(new ErrorResponse("Invalid credentials", 401));
+    return res.status(401).json({ message: 'Invalid credential' });
   }
 
-  // res.status(200).json({
-  //   status: "success",
-  //   user
-  // });
-
-  sendTokens(user, 200, res);
+  sendTokens(req.token, user, 200, res);
 });
 
 // @desc  update user Profile
@@ -428,6 +418,8 @@ exports.updateProfile = asyncHandler(async (req, res, next) => {
 
     user.email = req.body.email || user.email;
 
+    user.avatar = req.body.avatar || user.avatar
+
     if (req.body.password) {
       user.password = req.body.password;
     }
@@ -435,7 +427,7 @@ exports.updateProfile = asyncHandler(async (req, res, next) => {
     updatedUser = await user.save();
   }
 
-  sendTokens(updatedUser, 201, res);
+  sendTokens(req.token, updatedUser, 201, res);
 });
 
 // @desc Get All Users
@@ -499,7 +491,7 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
     updatedUser = await user.save();
   }
 
-  sendTokens(updatedUser, 201, res);
+  sendTokens(req.token, updatedUser, 201, res);
 });
 
 const sendTokens = (access_token, userData, statusCode, res) => {
@@ -509,6 +501,7 @@ const sendTokens = (access_token, userData, statusCode, res) => {
     name: userData.name,
     email: userData.email,
     isAdmin: userData.isAdmin,
+    avatar: userData.avatar
   };
 
   res.status(statusCode).json({

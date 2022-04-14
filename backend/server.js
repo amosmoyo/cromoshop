@@ -24,6 +24,8 @@ const fileUpload = require("./routes/upload");
 
 const path = require("path");
 
+const fileuploadAvatar = require('express-fileupload')
+
 
 // const patt1 = require('./../frontend/build')
 
@@ -68,13 +70,22 @@ app.use(errorHandler);
 
 
 app.use(cookieParser())
-app.use("/api/v1/auth", auth);
+
+
 
 app.use("/api/v1/products", productsRoutes);
 
 app.use("/api/v1/order", order);
 
 app.use("/api/v1/upload", fileUpload);
+
+app.use(fileuploadAvatar(
+  {
+    useTempFiles: true
+  }
+))
+
+app.use("/api/v1/auth", auth);
 // app.use(notFound)
 
 // const data = JSON.stringify(products)

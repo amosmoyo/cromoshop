@@ -22,8 +22,8 @@ export const Product = ({product}) => {
                     <Rating value={product.rating} text={`${product.numReviews} reviews`} />
                 </div>
             </Card.Text>
-            <Card.Text as="h3">
-                $ {product.price}
+            <Card.Text as="h3" style={{textTransform: "none"}}>
+                Ksh {product.price}
             </Card.Text>
             </Card.Body>
         </Card>

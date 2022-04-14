@@ -15,10 +15,13 @@ const {
   forgotPassword,
   resetPassword,
   googleLogin,
-  facebookLogin
+  facebookLogin,
 } = require("../controller/authController");
 
+const {uploadAvatar} = require('../controller/upload')
+
 const { protect, adminPrivilages } = require("../middleware/auth");
+const {avatarUploadMiddleware} = require("../middleware/avatarUpload")
 
 const router = express.Router();
 
@@ -40,7 +43,11 @@ router.route("/users").get(protect, adminPrivilages, getAllUsers);
 
 router.route('/googleLogin').post(googleLogin);
 
-router.route('/facebooklogin').post(facebookLogin)
+router.route('/facebooklogin').post(facebookLogin);
+
+router.route('/uploadAvatar').post(avatarUploadMiddleware, uploadAvatar)
+
+
 
 router
   .route("/users/:id")

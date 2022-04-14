@@ -68,6 +68,8 @@ const CreateProductScreen = () => {
   const uploadingFileHandler = async (e) => {
     const file = e.target.files[0];
 
+    console.log(file);
+
     const formData = new FormData();
 
     formData.append("image", file);
@@ -91,6 +93,8 @@ const CreateProductScreen = () => {
         formData,
         config
       );
+
+      console.log(res)
 
       if (res.status === 200 || res.status === 201) {
         setUploading(false);

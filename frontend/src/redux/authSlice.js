@@ -16,6 +16,8 @@ const authInitialState = {
   success: false,
   forgotPasswordMessage: "",
   resetPasswordMessage: "",
+  url:"",
+  loginMessage: ''
 };
 
 export const profile = createAsyncThunk(
@@ -23,7 +25,7 @@ export const profile = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const { token } = thunkAPI.getState().authReducers.userData;
-
+      
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -106,8 +108,6 @@ export const register = createAsyncThunk(
 
       let data;
 
-      console.log(response);
-
       if (response.status === 200 || response.status === 201) {
         data = response.data;
         // localStorage.setItem("auth", data.token);
@@ -142,8 +142,6 @@ export const activateEmail = createAsyncThunk(
         { activation_token },
         config
       );
-
-      console.log(res);
 
       let data;
 
@@ -367,9 +365,50 @@ export const facebookLogin = createAsyncThunk(
   }
 )
 
+export const uploadAvatar = createAsyncThunk(
+  "upload avatar",
+  async (formData, thunkAPI) => {
+    try {
+      const state = thunkAPI.getState();
+
+      let token = state?.authReducers?.userData?.token;
+
+    
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      };
+
+      const response = await axios.post(
+        `/api/v1/auth/uploadAvatar`,
+        formData,
+        config
+      );
+
+      let data;
+
+      if (response.status === 200 || response.status === 201) {
+        console.log(response)
+        data = response.data;
+        return data;
+      }
+    } catch (error) {
+      const err =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    // return thunkAPI.rejectWithValue(err)
+    throw Error(err);
+    }
+  }
+)
+
 export const logout = createAsyncThunk(
   "/api/vi/auth/logout",
   async (_, thunkAPI) => {
+    
     localStorage.removeItem("auth");
     localStorage.removeItem("cartItems");
     localStorage.removeItem("userData");
@@ -379,6 +418,8 @@ export const logout = createAsyncThunk(
     thunkAPI.dispatch(authAction.resetUser());
     thunkAPI.dispatch(orderAction.myOrderReset());
     thunkAPI.dispatch(adminActions.resetUserList());
+    thunkAPI.dispatch(authAction.resetLogin())
+
     document.location.href = "/login";
   }
 );
@@ -401,6 +442,10 @@ const authSlice = createSlice({
       state.success = false;
       state.message = "";
     },
+    resetLogin(state, action) {
+      state.loginMessage = '';
+      state.message = '';
+    }
   },
   extraReducers: {
     // register
@@ -437,6 +482,7 @@ const authSlice = createSlice({
     [login.fulfilled]: (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
+      state.loginMessage = action.payload.message
       // state.userData = action.payload;
       // localStorage.setItem("userData", JSON.stringify(state.userData));
     },
@@ -542,6 +588,18 @@ const authSlice = createSlice({
       state.resetPasswordMessage = action.payload.message;
     },
     [resetPassword.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    },
+
+    [uploadAvatar.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [uploadAvatar.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.url = action.payload.url;
+    },
+    [uploadAvatar.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     },
