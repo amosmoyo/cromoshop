@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Dropdown, Nav, Navbar, NavDropdown } from "react-bootstrap";
+import { Container, Dropdown, Nav, Navbar, NavDropdown, Image } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, authAction } from "../redux/authSlice";
@@ -31,14 +31,21 @@ const Header = () => {
                   </Nav.Link>
               </LinkContainer> */}
               <LinkContainer to="/cart">
-                <Nav.Link>
+                <Nav.Link className={userData.userInfo ? "py-3" : ""}>
                   <i className="fas fa-shopping-cart"></i>cart
                 </Nav.Link>
               </LinkContainer>
               {userData?.userInfo ? (
                 <NavDropdown
-                  title={userData.userInfo.email.toLowerCase()}
-                  id="useremail"
+                  // title={userData.userInfo.email.toLowerCase()}
+                  title={
+                    <Image
+                    src={userData.userInfo.avatar}
+                    alt="UserName profile image"
+                    roundedCircle
+                    style={{ width: '40px', height: "40px" }}
+                  />
+                  }
                 >
                   <LinkContainer to="/profile">
                     <Dropdown.Item>Profile</Dropdown.Item>
@@ -58,6 +65,7 @@ const Header = () => {
                 <NavDropdown
                   title='admin'
                   id="admin-menu"
+                  className={userData.userInfo.isAdmin ? "py-2" : ""}
                 >
                   <LinkContainer to="/admin/userlist">
                     <Dropdown.Item>User List</Dropdown.Item>

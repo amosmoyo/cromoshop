@@ -134,6 +134,7 @@ export const getMyOrderList = createAsyncThunk(
 
       let token = state?.authReducers?.userData?.token;
 
+    
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -149,7 +150,6 @@ export const getMyOrderList = createAsyncThunk(
       let data;
 
       if (response.status === 200 || response.status === 201) {
-        console.log(response)
         data = response.data;
         return data;
       }

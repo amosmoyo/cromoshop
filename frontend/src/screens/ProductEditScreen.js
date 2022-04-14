@@ -50,8 +50,6 @@ const ProductEditScreen = () => {
       navigate('/admin/productlist');
       dispatch(adminActions.resetUpdate())
     }
-
-    console.log(successUpdate)
     
     if (id) {
       if (!product?._id || product?._id !== id) {
@@ -117,11 +115,9 @@ const ProductEditScreen = () => {
       if (res.status === 200 || res.status === 201) {
         setUploading(false);
         data = res.data;
-        console.log(data.result[0].url);
         setImage(data.result[0].url)
       }
     } catch (error) {
-      console.error(error);
       setUploading(false);
     }
   }

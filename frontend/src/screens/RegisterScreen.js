@@ -5,7 +5,16 @@ import { Form, Button, Row, Col } from "react-bootstrap";
 import Message from "../components/Message";
 import Loader from "../components/Loading";
 import { useDispatch, useSelector } from "react-redux";
-import { register, authAction } from "../redux/authSlice";
+import {
+  register,
+  authAction,
+  googleLogin,
+  facebookLogin,
+  getAccessToken,
+} from "../redux/authSlice";
+
+import { GoogleLogin } from "react-google-login";
+import FacebookLogin from "react-facebook-login";
 
 const RegisterScreen = () => {
   const [email, setEmail] = useState("");
@@ -14,15 +23,13 @@ const RegisterScreen = () => {
   const [confirmPassword, setconfirmPassword] = useState("");
   const [message, setMessage] = useState(null);
   const [authMess, setAuthMessage] = useState(null);
-  const [registerSuccess, setregisterSuccess] = useState(false)
+  const [registerSuccess, setregisterSuccess] = useState(false);
 
   const dispatch = useDispatch();
 
   const location = useLocation();
 
   const navigate = useNavigate();
-
-  console.log(location.search.split("=")[1], 111);
 
   const redirect = location.search ? location.search.split("=")[1] : "/";
 
@@ -37,9 +44,9 @@ const RegisterScreen = () => {
   useEffect(() => {
     dispatch(authAction.resetRegister());
     if (success) {
-      setregisterSuccess(true)
+      setregisterSuccess(true);
       // navigate(redirect);
-      setAuthMessage(authMessage)
+      setAuthMessage(authMessage);
       setEmail("");
       setName("");
       setPassword("");
@@ -63,7 +70,38 @@ const RegisterScreen = () => {
     }
   };
 
-  console.log(authMessage);
+  const responseGoogle = async (res) => {
+    let tokenId = res.tokenId;
+
+    const response = await dispatch(googleLogin(tokenId));
+
+    const { payload } = response;
+
+    const { message } = payload;
+
+    if (message === "Login success!") {
+      // navigate("/");
+      dispatch(getAccessToken());
+      navigate(redirect);
+    }
+  };
+
+  const responseFacebook = async (res) => {
+    let { accessToken, userID } = res;
+
+    const response = await dispatch(facebookLogin({ accessToken, userID }));
+
+    const { payload } = response;
+
+    if (payload) {
+      const { message } = payload;
+
+      if (message === "Login success!") {
+        dispatch(getAccessToken());
+        navigate(redirect);
+      }
+    }
+  };
 
   return (
     <FormContainer>
@@ -114,10 +152,38 @@ const RegisterScreen = () => {
             ></Form.Control>
           </Form.Group>
 
-          <Button type="submit" variant="primary" className="mt-3">
+          <Button type="submit" variant="primary" className="mt-3 w-100">
             Register
           </Button>
         </Form>
+
+
+        <div className="hr py-2" style={{color: "crimson"}}>Or Signup with</div>
+
+        <Row className="py-1">
+          <Col md={12} className="social">
+            <GoogleLogin
+              clientId="739747282033-760ia9gummv0ua9k4can89kf7ptuvnvb.apps.googleusercontent.com"
+              buttonText="signup with google"
+              onSuccess={responseGoogle}
+              onFailure={(err) => console.log("fail", err)}
+              cookiePolicy={"single_host_origin"}
+            />
+          </Col>
+        </Row>
+
+        <Row className="py-1">
+          <Col md={12} className="social">
+            <FacebookLogin
+              appId="705905767108848"
+              autoLoad={false}
+              textButton="signup with facebook"
+              fields="name,email,picture"
+              // onClick={componentClicked}
+              callback={responseFacebook}
+            />
+          </Col>
+        </Row>
 
         <Row className="py-3">
           <Col>

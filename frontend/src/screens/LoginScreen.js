@@ -22,28 +22,19 @@ const LoginScreen = () => {
 
   const redirect = location.search ? location.search.split("=")[1] : "/";
 
-  const { loading, error, userData, message } = useSelector(
+  const { loading, error, userData} = useSelector(
     (state) => state.authReducers
   );
 
   useEffect(() => {
-
-    const fetctAccessToken = async () => {
-      await dispatch(getAccessToken())
-    }
-
-    if(message === "Login success") {
-      // dispatch(getAccessToken())
-      // navigate(redirect)
-      // navigate(redirect)
-      dispatch(getAccessToken())
+    if(userData.userInfo) {
       navigate(redirect)
     }
 
     // if (userData?.success) {
     //   navigate(redirect);
     // }
-  }, [userData, navigate, redirect, message, dispatch]);
+  }, [userData, navigate, redirect, dispatch]);
 
 
 
@@ -117,7 +108,7 @@ const LoginScreen = () => {
           ></Form.Control>
         </Form.Group>
 
-        <Button type="submit" variant="primary" className="mt-3">
+        <Button type="submit" variant="primary" className="mt-3 w-100">
           Sign In
         </Button>
       </Form>

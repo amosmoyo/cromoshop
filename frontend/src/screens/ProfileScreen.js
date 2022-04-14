@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 // import FormContainer from "../components/FormContainer";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import {Table, Form, Button, Row, Col } from "react-bootstrap";
-import {LinkContainer} from 'react-router-bootstrap'
+import { Table, Form, Button, Row, Col, Image } from "react-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
 import Message from "../components/Message";
 import Loader from "../components/Loading";
 import { useDispatch, useSelector } from "react-redux";
-import { profile, updateProfile } from "../redux/authSlice";
-import {getMyOrderList} from '../redux/orderSlice';
-
+import { profile, updateProfile, uploadAvatar, getAccessToken } from "../redux/authSlice";
+import { getMyOrderList } from "../redux/orderSlice";
+import "./common.css";
 
 const ProfileScreen = () => {
   const [email, setEmail] = useState("");
@@ -16,6 +16,8 @@ const ProfileScreen = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setconfirmPassword] = useState("");
   const [message, setMessage] = useState(null);
+  const [avatar, setAvatar] = useState(false);
+  const [loading, setLoading] = useState(true)
 
   const dispatch = useDispatch();
 
@@ -25,31 +27,33 @@ const ProfileScreen = () => {
 
   // const redirect = location.search ? location.search.split("=")[1] : "/";
 
-  const { loading, error, userData, user } = useSelector(
+  const { error, userData, user, token } = useSelector(
     (state) => state.authReducers
   );
 
-  const {loadMyOrderList, myOrderList} = useSelector(
+  const { loadMyOrderList, myOrderList } = useSelector(
     (state) => state.orderReducers
-  )
+  );
 
   useEffect(() => {
-    if(!userData?.success) {
-        navigate('/login')
-    }else{
-      if(!user?.success || !user.userInfo.name) {
-          dispatch(profile());
-          dispatch(getMyOrderList())
+    if (!userData?.success) {
+      navigate("/login");
+    } else {
+      if (!user?.success || !user.userInfo.name) {
+        dispatch(profile());
+        dispatch(getMyOrderList());
       } else {
-          setName(user?.userInfo?.name);
-          setEmail(user?.userInfo?.email)
+        setLoading(false)
+        // dispatch(getAccessToken())
+        setName(user?.userInfo?.name);
+        setEmail(user?.userInfo?.email);
       }
     }
   }, [navigate, userData, dispatch, user]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    setLoading(true)
     if (password !== confirmPassword) {
       setMessage("password do not match");
     } else {
@@ -57,11 +61,47 @@ const ProfileScreen = () => {
         email,
         password,
         name,
+        avatar,
       };
 
-      setMessage(null)
+      setMessage(null);
 
       dispatch(updateProfile(updateData));
+
+      setLoading(false)
+    }
+  };
+
+  const onChangeAvatar = async (e) => {
+    e.preventDefault();
+
+    const file = e.target.files[0];
+
+    setLoading(true)
+
+    if (!file) {
+      setMessage("No file provided");
+    } else if (file.size > 1024 * 1024) {
+      setMessage("File size is too large");
+    } else if (
+      (file.type !== "image/jpeg" || file.type !== "image/png") === false
+    ) {
+      setMessage("Incorect file format");
+    } else {
+      setMessage(null);
+      const formData = new FormData();
+
+      formData.append("file", file);
+
+      const data = await dispatch(uploadAvatar(formData));
+
+      const { payload } = data;
+
+      if (payload) {
+        const { url } = payload;
+        setLoading(false)
+        setAvatar(url);
+      }
     }
   };
 
@@ -72,6 +112,40 @@ const ProfileScreen = () => {
         {message && <Message variant="danger">{message}</Message>}
         {error && <Message variant="danger">{error}</Message>}
         {loading && <Loader />}
+        {userData.userInfo && (
+          <div>
+            <div className="avatar">
+              <Image
+                src={avatar ? avatar : userData.userInfo.avatar}
+                alt="UserName profile image"
+                roundedCircle
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  // margin: "15px auto",
+                  objectFit: "cover",
+                  display: "block",
+                }}
+              />
+              <span>
+                <i className="fas fa-camera"></i>
+                <p>change</p>
+                <input
+                  type="file"
+                  name="file"
+                  style={{
+                    position: "absolute",
+                    top: '0',
+                    left: 0,
+                    cursor: "pointer",
+                    opacity: 0,
+                  }}
+                  onChange={onChangeAvatar}
+                />
+              </span>
+            </div>
+          </div>
+        )}
         <Form onSubmit={handleSubmit}>
           <Form.Group controlId="name">
             <Form.Label>Name</Form.Label>
@@ -132,18 +206,34 @@ const ProfileScreen = () => {
             </tr>
           </thead>
           <tbody>
-            {myOrderList.map((order) => <tr key={order?._id}>
-              <td>{order?._id}</td>
-              <td>{order?.createdAt.substring(0, 10)}</td>
-              <td>{order?.totalPrice}</td>
-              <td>{order?.isPaid ? (order?.paidAt.substring(0, 10)) : (<i className='fas fa-times' style={{ color: 'red' }}></i>)}</td>
-              <td>{order?.isDelivered ? (order?.deliveredAt.substring(0, 10)) : (<i className='fas fa-times' style={{ color: 'red' }}></i>)}</td>
-              <td>
-                <LinkContainer to={`/orderlist/${order?._id}`}>
-                  <Button className="btn-sm" size="sm" variant="light">Details</Button>
-                </LinkContainer>
-              </td>
-            </tr>)}
+            {myOrderList.map((order) => (
+              <tr key={order?._id}>
+                <td>{order?._id}</td>
+                <td>{order?.createdAt.substring(0, 10)}</td>
+                <td>{order?.totalPrice}</td>
+                <td>
+                  {order?.isPaid ? (
+                    order?.paidAt.substring(0, 10)
+                  ) : (
+                    <i className="fas fa-times" style={{ color: "red" }}></i>
+                  )}
+                </td>
+                <td>
+                  {order?.isDelivered ? (
+                    order?.deliveredAt.substring(0, 10)
+                  ) : (
+                    <i className="fas fa-times" style={{ color: "red" }}></i>
+                  )}
+                </td>
+                <td>
+                  <LinkContainer to={`/orderlist/${order?._id}`}>
+                    <Button className="btn-sm" size="sm" variant="light">
+                      Details
+                    </Button>
+                  </LinkContainer>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </Table>
       </Col>

@@ -9,13 +9,9 @@ const jwt = require("jsonwebtoken");
 exports.protect = asyncHandler( async(req, res, next) => {
     let token;
 
-    console.log(req.headers.authorization.split(' ')[1])
-
     if (req.headers.authorization && (req.headers.authorization.split(' ')[0] === "Bearer" )) {
         token = req.headers.authorization.split(' ')[1];
     }
-
-
 
     if(!token) {
         return next(new ErrorResponse("Not authorized to access this route", 401))
@@ -26,6 +22,7 @@ exports.protect = asyncHandler( async(req, res, next) => {
         
         req.user = await User.findById(decoded.id);
 
+        req.token = token;
 
         next()
     } catch (error) {

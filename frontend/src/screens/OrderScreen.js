@@ -64,6 +64,8 @@ const OrderScreen = () => {
 
       let token = `${clientId}`;
 
+      console.log(token)
+
       setPaypalToken(token);
 
       let script = document.createElement("script");
