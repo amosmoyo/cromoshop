@@ -16,8 +16,8 @@ const authInitialState = {
   success: false,
   forgotPasswordMessage: "",
   resetPasswordMessage: "",
-  url:"",
-  loginMessage: ''
+  url: "",
+  loginMessage: "",
 };
 
 export const profile = createAsyncThunk(
@@ -25,7 +25,7 @@ export const profile = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const { token } = thunkAPI.getState().authReducers.userData;
-      
+
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -42,12 +42,16 @@ export const profile = createAsyncThunk(
         return data;
       }
     } catch (error) {
-      const err =
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message;
-      console.log("error", err);
-      // return thunkAPI.rejectWithValue(err)
+      let err = "";
+
+      if (error.response && error.response.data.error) {
+        err = error.response.data.error;
+      } else if (error.response && error.response.data.message) {
+        err = error.response.data.message;
+      } else {
+        err = error.message;
+      }
+
       throw Error(err);
     }
   }
@@ -79,12 +83,16 @@ export const updateProfile = createAsyncThunk(
         return data;
       }
     } catch (error) {
-      const err =
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message;
+      let err = "";
 
-      console.log("error", err);
+      if (error.response && error.response.data.error) {
+        err = error.response.data.error;
+      } else if (error.response && error.response.data.message) {
+        err = error.response.data.message;
+      } else {
+        err = error.message;
+      }
+
       throw Error(err);
     }
   }
@@ -116,13 +124,17 @@ export const register = createAsyncThunk(
         return thunkAPI.rejectWithValue(data);
       }
     } catch (error) {
-      const err =
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message;
+      let err = "";
 
-      thunkAPI.dispatch(authAction.setMessage(err));
-      return thunkAPI.rejectWithValue();
+      if (error.response && error.response.data.error) {
+        err = error.response.data.error;
+      } else if (error.response && error.response.data.message) {
+        err = error.response.data.message;
+      } else {
+        err = error.message;
+      }
+
+      throw Error(err);
     }
   }
 );
@@ -151,12 +163,16 @@ export const activateEmail = createAsyncThunk(
         return data;
       }
     } catch (error) {
-      const err =
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message;
-      console.log("error", err);
-      // return thunkAPI.rejectWithValue(err)
+      let err = "";
+
+      if (error.response && error.response.data.error) {
+        err = error.response.data.error;
+      } else if (error.response && error.response.data.message) {
+        err = error.response.data.message;
+      } else {
+        err = error.message;
+      }
+
       throw Error(err);
     }
   }
@@ -164,7 +180,10 @@ export const activateEmail = createAsyncThunk(
 
 export const login = createAsyncThunk(
   "/api/vi/auth/login",
-  async (loginData, thunkAPI) => {
+  async (
+    loginData,
+    { dispatch, getState, rejectWithValue, fulfillWithValue }
+  ) => {
     try {
       const config = {
         headers: {
@@ -180,20 +199,25 @@ export const login = createAsyncThunk(
         config
       );
 
-      let data = response.data;
+      let data;
 
-      if (response.status === 200) {
+      if (response.status === 200 || response.status === 201) {
+        data = response.data;
         localStorage.setItem("auth", data.token);
 
-        return data;
+        return fulfillWithValue(data);
       }
     } catch (error) {
-      const err =
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message;
-      console.log("error", err);
-      // return thunkAPI.rejectWithValue(err)
+      let err = "";
+
+      if (error.response && error.response.data.error) {
+        err = error.response.data.error;
+      } else if (error.response && error.response.data.message) {
+        err = error.response.data.message;
+      } else {
+        err = error.message;
+      }
+
       throw Error(err);
     }
   }
@@ -228,12 +252,16 @@ export const getAccessToken = createAsyncThunk("get access token", async () => {
       return data;
     }
   } catch (error) {
-    const err =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message;
-    console.log("error", err);
-    // return thunkAPI.rejectWithValue(err)
+    let err = "";
+
+    if (error.response && error.response.data.error) {
+      err = error.response.data.error;
+    } else if (error.response && error.response.data.message) {
+      err = error.response.data.message;
+    } else {
+      err = error.message;
+    }
+
     throw Error(err);
   }
 });
@@ -254,12 +282,16 @@ export const forgotPassword = createAsyncThunk(
         return data;
       }
     } catch (error) {
-      const err =
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message;
-      console.log("error", err);
-      // return thunkAPI.rejectWithValue(err)
+      let err = "";
+
+      if (error.response && error.response.data.error) {
+        err = error.response.data.error;
+      } else if (error.response && error.response.data.message) {
+        err = error.response.data.message;
+      } else {
+        err = error.message;
+      }
+
       throw Error(err);
     }
   }
@@ -291,79 +323,97 @@ export const resetPassword = createAsyncThunk(
         return data;
       }
     } catch (error) {
-      const err =
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message;
-      // return thunkAPI.rejectWithValue(err)
+      let err = "";
+
+      if (error.response && error.response.data.error) {
+        err = error.response.data.error;
+      } else if (error.response && error.response.data.message) {
+        err = error.response.data.message;
+      } else {
+        err = error.message;
+      }
+
       throw Error(err);
     }
   }
 );
 
-export const googleLogin = createAsyncThunk("google login", async (tokenId) => {
-  try {
-    const config = {
-      withCredentials: true,
-      crossdomain: true,
-    };
-
-    const response = await axios.post(
-      `/api/v1/auth/googleLogin`,
-      { tokenId },
-      config
-    );
-
-    let data;
-
-    if (response.status === 200 || response.status === 201) {
-      data = response.data;
-
-      return data;
-    }
-  } catch (error) {
-    const err =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message;
-    // return thunkAPI.rejectWithValue(err)
-    throw Error(err);
-  }
-});
-
-export const facebookLogin = createAsyncThunk(
-  'facebook login',
-  async ({accessToken, userID}) => {
+export const googleLogin = createAsyncThunk(
+  "google login",
+  async (tokenId, thunkAPI) => {
     try {
-
       const config = {
         withCredentials: true,
         crossdomain: true,
       };
-  
+
       const response = await axios.post(
-        `/api/v1/auth/facebooklogin`,
-        {accessToken, userID},
+        `/api/v1/auth/googleLogin`,
+        { tokenId },
         config
       );
-  
+
       let data;
-  
+
+      if (response.status === 200 || response.status === 201) {
+        data = response.data;
+
+        console.log(data, "datadata");
+
+        return data;
+      }
+    } catch (error) {
+      let err = "";
+
+      if (error.response && error.response.data.error) {
+        err = error.response.data.error;
+      } else if (error.response && error.response.data.message) {
+        err = error.response.data.message;
+      } else {
+        err = error.message;
+      }
+
+      throw Error(err);
+    }
+  }
+);
+
+export const facebookLogin = createAsyncThunk(
+  "facebook login",
+  async ({ accessToken, userID }) => {
+    try {
+      const config = {
+        withCredentials: true,
+        crossdomain: true,
+      };
+
+      const response = await axios.post(
+        `/api/v1/auth/facebooklogin`,
+        { accessToken, userID },
+        config
+      );
+
+      let data;
+
       if (response.status === 200 || response.status === 201) {
         data = response.data;
         return data;
       }
-      
     } catch (error) {
-      const err =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message;
-    // return thunkAPI.rejectWithValue(err)
-    throw Error(err);
+      let err = "";
+
+      if (error.response && error.response.data.error) {
+        err = error.response.data.error;
+      } else if (error.response && error.response.data.message) {
+        err = error.response.data.message;
+      } else {
+        err = error.message;
+      }
+
+      throw Error(err);
     }
   }
-)
+);
 
 export const uploadAvatar = createAsyncThunk(
   "upload avatar",
@@ -373,7 +423,6 @@ export const uploadAvatar = createAsyncThunk(
 
       let token = state?.authReducers?.userData?.token;
 
-    
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -390,35 +439,39 @@ export const uploadAvatar = createAsyncThunk(
       let data;
 
       if (response.status === 200 || response.status === 201) {
-        console.log(response)
+        console.log(response);
         data = response.data;
         return data;
       }
     } catch (error) {
-      const err =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message;
-    // return thunkAPI.rejectWithValue(err)
-    throw Error(err);
+      let err = "";
+
+      if (error.response && error.response.data.error) {
+        err = error.response.data.error;
+      } else if (error.response && error.response.data.message) {
+        err = error.response.data.message;
+      } else {
+        err = error.message;
+      }
+
+      throw Error(err);
     }
   }
-)
+);
 
 export const logout = createAsyncThunk(
   "/api/vi/auth/logout",
   async (_, thunkAPI) => {
-    
     localStorage.removeItem("auth");
     localStorage.removeItem("cartItems");
     localStorage.removeItem("userData");
     localStorage.removeItem("shippingAddress");
     localStorage.removeItem("payment");
 
-    thunkAPI.dispatch(authAction.resetUser());
+    thunkAPI.dispatch(authActions.resetUser());
     thunkAPI.dispatch(orderAction.myOrderReset());
     thunkAPI.dispatch(adminActions.resetUserList());
-    thunkAPI.dispatch(authAction.resetLogin())
+    thunkAPI.dispatch(authActions.resetLogin());
 
     document.location.href = "/login";
   }
@@ -430,10 +483,10 @@ const authSlice = createSlice({
   initialState: authInitialState,
   reducers: {
     setMessage(state, action) {
-      return { error: action.payload };
+      state.error = "";
     },
     clearMessage(state) {
-      return { message: "" };
+      state.message = "";
     },
     resetUser(state, action) {
       state.userData = {};
@@ -443,9 +496,9 @@ const authSlice = createSlice({
       state.message = "";
     },
     resetLogin(state, action) {
-      state.loginMessage = '';
-      state.message = '';
-    }
+      state.loginMessage = "";
+      state.message = "";
+    },
   },
   extraReducers: {
     // register
@@ -482,7 +535,7 @@ const authSlice = createSlice({
     [login.fulfilled]: (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
-      state.loginMessage = action.payload.message
+      state.loginMessage = action.payload.message;
       // state.userData = action.payload;
       // localStorage.setItem("userData", JSON.stringify(state.userData));
     },
@@ -606,6 +659,6 @@ const authSlice = createSlice({
   },
 });
 
-export const authAction = authSlice.actions;
+export const authActions = authSlice.actions;
 
 export default authSlice.reducer;

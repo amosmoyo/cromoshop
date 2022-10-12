@@ -48,19 +48,21 @@ function App() {
 
   // const redirect = location.search ? location.search.split("-")[1] : "/";
 
-  const {  userData, message, loginMessage } = useSelector(
+  const { userData, message, loginMessage } = useSelector(
     (state) => state.authReducers
   );
 
   React.useEffect(() => {
-    if (loginMessage === "Login success" ) {
-      // dispatch(getAccessToken())
-      // navigate(redirect)
-      // navigate(redirect)
-      dispatch(getAccessToken());
-      // navigate(redirect);
+    if (loginMessage) {
+      if (loginMessage === "Login success") {
+        // dispatch(getAccessToken())
+        // navigate(redirect)
+        // navigate(redirect)
+        dispatch(getAccessToken());
+        // navigate(redirect);
+      }
     }
-  }, [dispatch, loginMessage,]);
+  }, [dispatch, loginMessage]);
 
   return (
     <Router>

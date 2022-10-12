@@ -47,10 +47,16 @@ export const addItemsToCart = createAsyncThunk(
 
       return { ...data.product, qty };
     } catch (error) {
-      const err =
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message;
+      let err = "";
+
+      if (error.response && error.response.data.error) {
+        err = error.response.data.error;
+      } else if (error.response && error.response.data.message) {
+        err = error.response.data.message;
+      } else {
+        err = error.message;
+      }
+
       throw Error(err);
     }
   },
@@ -64,10 +70,16 @@ export const RemoveItemsTFromCart = createAsyncThunk(
       // const { data } = await axios.get(url + "api/v1/products/details/" + id);
       return id;
     } catch (error) {
-      const err =
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message;
+      let err = "";
+
+      if (error.response && error.response.data.error) {
+        err = error.response.data.error;
+      } else if (error.response && error.response.data.message) {
+        err = error.response.data.message;
+      } else {
+        err = error.message;
+      }
+
       throw Error(err);
     }
   }
@@ -79,10 +91,16 @@ export const SaveShippingAddress = createAsyncThunk(
     try {
       return formData;
     } catch (error) {
-      const err =
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message;
+      let err = "";
+
+      if (error.response && error.response.data.error) {
+        err = error.response.data.error;
+      } else if (error.response && error.response.data.message) {
+        err = error.response.data.message;
+      } else {
+        err = error.message;
+      }
+
       throw Error(err);
     }
   }
@@ -94,10 +112,16 @@ export const SavePaymentMethod = createAsyncThunk(
     try {
       return payment;
     } catch (error) {
-      const err =
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message;
+      let err = "";
+
+      if (error.response && error.response.data.error) {
+        err = error.response.data.error;
+      } else if (error.response && error.response.data.message) {
+        err = error.response.data.message;
+      } else {
+        err = error.message;
+      }
+
       throw Error(err);
     }
   }
