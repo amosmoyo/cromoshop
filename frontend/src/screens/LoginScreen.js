@@ -5,7 +5,7 @@ import { Form, Button, Row, Col } from "react-bootstrap";
 import Message from "../components/Message";
 import Loader from "../components/Loading";
 import { useDispatch, useSelector } from "react-redux";
-import { login, getAccessToken, googleLogin, facebookLogin } from "../redux/authSlice";
+import { login, getAccessToken, googleLogin, facebookLogin, authActions } from "../redux/authSlice";
 import { GoogleLogin } from "react-google-login";
 import FacebookLogin from "react-facebook-login";
 
@@ -13,6 +13,8 @@ const LoginScreen = () => {
   const [email, setEmail] = useState("");
 
   const [password, setPassword] = useState("");
+  
+  const [loginErr, setLoginErr] = useState(null)
 
   const dispatch = useDispatch();
 
@@ -22,12 +24,17 @@ const LoginScreen = () => {
 
   const redirect = location.search ? location.search.split("=")[1] : "/";
 
-  const { loading, error, userData} = useSelector(
+  const { loading, error, userData, loginMessage} = useSelector(
     (state) => state.authReducers
   );
 
+  console.log(error)
+
   useEffect(() => {
+    dispatch(authActions.resetLogin());
+
     if(userData.userInfo) {
+
       navigate(redirect)
     }
 
@@ -57,9 +64,15 @@ const LoginScreen = () => {
 
     const { payload } = response;
 
-    const { message } = payload;
+    // const { message } = payload;
 
-    if (message === "Login success!") {
+    if(payload === undefined || payload.message === "Invalid credentials") {
+      // const {error} = response;
+
+      const {message} = payload
+
+      setLoginErr(message)
+    } else if (payload.message === "Login success!") {
       // navigate("/");
       dispatch(getAccessToken())
       navigate(redirect)
@@ -86,6 +99,8 @@ const LoginScreen = () => {
   return (
     <FormContainer>
       <h1>Sign in </h1>
+      {loginErr === "Invalid credentials" && <Message variant="danger">{loginErr}</Message>}
+      {loginMessage === "Invalid credentials" && <Message variant="danger">{loginMessage}</Message>}
       {error && <Message variant="danger">{error}</Message>}
       {loading && <Loader />}
       <Form onSubmit={handleSubmit}>

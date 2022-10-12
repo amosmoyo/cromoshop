@@ -32,10 +32,16 @@ export const getProducts = createAsyncThunk(
         return data;
       }
     } catch (error) {
-      const err =
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message;
+      let err = "";
+
+      if (error.response && error.response.data.error) {
+        err = error.response.data.error;
+      } else if (error.response && error.response.data.message) {
+        err = error.response.data.message;
+      } else {
+        err = error.message;
+      }
+
       throw Error(err);
     }
   }
@@ -82,12 +88,16 @@ export const createProductReview = createAsyncThunk(
         return data;
       }
     } catch (error) {
-      const err =
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message;
+      let err = "";
 
-      console.log("Error", err);
+      if (error.response && error.response.data.error) {
+        err = error.response.data.error;
+      } else if (error.response && error.response.data.message) {
+        err = error.response.data.message;
+      } else {
+        err = error.message;
+      }
+
       throw Error(err);
     }
   }
@@ -105,10 +115,16 @@ export const getTopRatedProducts = createAsyncThunk(
         return data;
       }
     } catch (error) {
-      const err =
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message;
+      let err = "";
+
+      if (error.response && error.response.data.error) {
+        err = error.response.data.error;
+      } else if (error.response && error.response.data.message) {
+        err = error.response.data.message;
+      } else {
+        err = error.message;
+      }
+
       throw Error(err);
     }
   }

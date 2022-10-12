@@ -7,7 +7,7 @@ import Loader from "../components/Loading";
 import { useDispatch, useSelector } from "react-redux";
 import {
   register,
-  authAction,
+  authActions,
   googleLogin,
   facebookLogin,
   getAccessToken,
@@ -42,7 +42,7 @@ const RegisterScreen = () => {
   } = useSelector((state) => state.authReducers);
 
   useEffect(() => {
-    dispatch(authAction.resetRegister());
+    dispatch(authActions.resetRegister());
     if (success) {
       setregisterSuccess(true);
       // navigate(redirect);

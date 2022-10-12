@@ -134,7 +134,8 @@ exports.login = asyncHandler(async (req, res, next) => {
   const isPasswordMatching = await bcrypt.compare(password, checkUser.password);
 
   if (!isPasswordMatching) {
-    return next(new ErrorResponse("Invalid credentials", 401));
+    // return next(new ErrorResponse("Invalid credentials", 401));
+    return res.status(401).json({message:"Invalid credentials"})
   }
 
   const refresh_token = createRefreshToken({ id: checkUser._id });

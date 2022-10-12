@@ -64,13 +64,7 @@ app.use(cors(corsOptions));
 //   next();
 // });
 
-
-
-app.use(errorHandler);
-
-
 app.use(cookieParser())
-
 
 
 app.use("/api/v1/products", productsRoutes);
@@ -100,6 +94,8 @@ app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
 // paypal config route
 app.get("/api/v1/config", (req, res) => res.send(process.env.PAYPAL_CLIENT_ID));
+
+app.use(errorHandler);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname + "./../frontend/build")));
