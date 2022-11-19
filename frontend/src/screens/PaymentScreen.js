@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import FormContainer from "../components/FormContainer";
 import { Form, Button, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,14 +9,21 @@ import CheckoutProcess from "../components/CheckoutProcess";
 const PaymentScreen = () => {
   const { shippingAddress } = useSelector((state) => state.cartReducers);
 
-  const [payment, setPayment] = React.useState("PayPal");
+  const [payment, setPayment] = React.useState("M-Pesa");
 
   const navigate = useNavigate();
+
+  console.log(payment, 12121212)
+
+  // useEffect(() => {
+
+  // }, [payment])
 
   const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
 
     dispatch(SavePaymentMethod(payment));
     navigate("/order");
@@ -34,13 +41,22 @@ const PaymentScreen = () => {
         <Form.Group>
           <Form.Label as="legend">Select payment method</Form.Label>
           <Col>
+          <Form.Check
+              type="radio"
+              label="M-Pesa"
+              id="M-Pesa"
+              name="paymentMethod"
+              value="M-Pesa"
+              onChange={(e) =>{ 
+                setPayment(e.target.value)
+              }}
+            ></Form.Check>
             <Form.Check
               type="radio"
               label="PayPal or Credit Card"
               id="PayPal"
               name="paymentMethod"
               value="PayPal"
-              checked
               onChange={(e) => setPayment(e.target.value)}
             ></Form.Check>
             <Form.Check

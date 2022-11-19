@@ -27,7 +27,7 @@ const Search = () => {
           value={sq}
           onChange={(e) => setSq(e.target.value)}
         ></Form.Control>
-        <Button variant="outline-success" type="submit" className="p-2" style={{padding:"2px"}}>
+        <Button variant="outline-warning" type="submit" className="p-2" style={{padding:"2px"}}>
           Search
         </Button>
       </Form>

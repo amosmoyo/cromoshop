@@ -38,7 +38,7 @@ h3{
 }
 
 .carousel-caption h3 {
-  color: #fff;
+  color: #000;
 }
 /* .carousel {
   background-color: red;
@@ -104,3 +104,33 @@ h3{
     font-size: 2.5vw;
   }
 }
+
+.navbar {
+  background-color: #000;
+  color: #FFD700 !important;
+}
+
+.navbar .color-me { 
+  color: #FFD700 !important;
+  font-style: italic !important;
+}
+
+.nav-item .dropdown-menu {
+  background: #000;
+}
+
+.nav-item .dropdown-item {
+  color: #FFD700;
+  /* font-weight: bold; */
+}
+
+.nav-item .dropdown-item:hover {
+  background: #fff;
+  font-weight: 300;
+}
+
+/* #nav-dropdown{
+  color: white;
+  font-weight: bold;
+  background-color: red;
+} */

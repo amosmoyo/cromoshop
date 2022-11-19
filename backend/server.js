@@ -12,6 +12,9 @@ const database = require("./configs/db");
 
 const { errorHandler, notFound } = require("./middleware/errorMiddleware");
 
+
+const payment = require('./routes/daraja')
+
 const colors = require("colors");
 
 const products = require("./data/products");
@@ -21,6 +24,8 @@ const auth = require("./routes/auth");
 const order = require("./routes/orders");
 
 const fileUpload = require("./routes/upload");
+
+const lipaNaMpesa = require('./routes/lipaNaMpesa')
 
 const path = require("path");
 
@@ -72,6 +77,10 @@ app.use("/api/v1/products", productsRoutes);
 app.use("/api/v1/order", order);
 
 app.use("/api/v1/upload", fileUpload);
+
+app.use("/api/v1/payment", payment)
+
+app.use("/api/v1/mpesa", lipaNaMpesa)
 
 app.use(fileuploadAvatar(
   {
