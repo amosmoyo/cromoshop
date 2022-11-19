@@ -16,23 +16,32 @@ const Header = () => {
 
   return (
     <div>
-      <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
+      <Navbar  variant="dark" className="navbar" expand="lg"   collapseOnSelect>
         <Container>
           <LinkContainer to="/">
-            <Navbar.Brand>Eunike</Navbar.Brand>
+            <Navbar.Brand className="color-me">
+            <img
+              src="https://res.cloudinary.com/amosmoyo/image/upload/v1668601246/brenda4_zxeehq.png"
+              width="50"
+              height="50"
+              className="d-inline-block align-bottom fst-italic"
+              alt="React Bootstrap logo"
+            />
+            unike
+            </Navbar.Brand>
           </LinkContainer>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Search />
-            <Nav className="ms-auto">
+            <Nav className="ms-auto"  >
               {/* <LinkContainer to='/login'>
                   <Nav.Link>
                     <i className='fas fa-user'></i> Sign In
                   </Nav.Link>
               </LinkContainer> */}
               <LinkContainer to="/cart">
-                <Nav.Link className={userData.userInfo ? "py-3" : ""}>
-                  <i className="fas fa-shopping-cart"></i>cart
+                <Nav.Link className={`${userData.userInfo ? "py-3" : ""} color-me`}>
+                  <i className="fas fa-shopping-cart" ></i>cart
                 </Nav.Link>
               </LinkContainer>
               {userData?.userInfo ? (
@@ -43,9 +52,15 @@ const Header = () => {
                     src={userData.userInfo.avatar}
                     alt="UserName profile image"
                     roundedCircle
-                    style={{ width: '40px', height: "40px" }}
+                    style={{ width: '40px', height: "40px"}}
                   />
                   }
+
+                 
+
+                  // style={{background: "#000"}}
+
+                  // className="color-me"
                 >
                   <LinkContainer to="/profile">
                     <Dropdown.Item>Profile</Dropdown.Item>
@@ -54,8 +69,8 @@ const Header = () => {
                 </NavDropdown>
               ) : (
                 <>
-                  <LinkContainer to="/login">
-                    <Nav.Link>
+                  <LinkContainer to="/login" >
+                    <Nav.Link className="color-me">
                       <i className="fas fa-user"></i>sign in
                     </Nav.Link>
                   </LinkContainer>
@@ -65,7 +80,7 @@ const Header = () => {
                 <NavDropdown
                   title='admin'
                   id="admin-menu"
-                  className={userData.userInfo.isAdmin ? "py-2" : ""}
+                  className={`${userData.userInfo.isAdmin ? "py-2" : ""} color-me`}
                 >
                   <LinkContainer to="/admin/userlist">
                     <Dropdown.Item>User List</Dropdown.Item>

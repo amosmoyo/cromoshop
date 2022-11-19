@@ -23,7 +23,7 @@ const ProductCarousel = () => {
       ) : error ? (
         <Message variant="danger">{error}</Message>
       ) : (
-        <Carousel style={{backgroundColor:"#111"}} >
+        <Carousel style={{backgroundColor:"#FFD700"}} >
           {topRatedProducts.map((product) => (
             <Carousel.Item style={{ textAlign:"center"}} key={product?._id}>
               <Link to={`/product/${product?._id}`}>
