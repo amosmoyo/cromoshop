@@ -9,19 +9,7 @@ const express = require("express");
 const router = express.Router();
 
 const daraja = (req, res) => {
-  // reqq.query({
-  //   grant_type: "client_credentials",
-  // });
 
-  // reqq.headers({
-  //   Authorization:
-  //     "Bearer=",
-  // });
-
-  // reqq.end((res) => {
-  //   if (res.error) throw new Error(res.error);
-  //   console.log(res.body);
-  // });
 };
 
 router.route("/payment").get(daraja);
