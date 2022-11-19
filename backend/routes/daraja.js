@@ -15,7 +15,7 @@ const daraja = (req, res) => {
 
   // reqq.headers({
   //   Authorization:
-  //     "Bearer cFJZcjZ6anEwaThMMXp6d1FETUxwWkIzeVBDa2hNc2M6UmYyMkJmWm9nMHFRR2xWOQ==",
+  //     "Bearer=",
   // });
 
   // reqq.end((res) => {
