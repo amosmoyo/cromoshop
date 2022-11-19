@@ -9,19 +9,19 @@ const express = require("express");
 const router = express.Router();
 
 const daraja = (req, res) => {
-  reqq.query({
-    grant_type: "client_credentials",
-  });
+  // reqq.query({
+  //   grant_type: "client_credentials",
+  // });
 
-  reqq.headers({
-    Authorization:
-      "Bearer cFJZcjZ6anEwaThMMXp6d1FETUxwWkIzeVBDa2hNc2M6UmYyMkJmWm9nMHFRR2xWOQ==",
-  });
+  // reqq.headers({
+  //   Authorization:
+  //     "Bearer cFJZcjZ6anEwaThMMXp6d1FETUxwWkIzeVBDa2hNc2M6UmYyMkJmWm9nMHFRR2xWOQ==",
+  // });
 
-  reqq.end((res) => {
-    if (res.error) throw new Error(res.error);
-    console.log(res.body);
-  });
+  // reqq.end((res) => {
+  //   if (res.error) throw new Error(res.error);
+  //   console.log(res.body);
+  // });
 };
 
 router.route("/payment").get(daraja);
